@@ -65,12 +65,15 @@ public class Board {
             if (snake.HasPoint(newHead)) {
                 newLevel = true;
             } else {
+                bool continueOuter = false;
                 foreach (var wall in Walls) {
                     if (wall.HasPoint(newHead)) {
-                        // פסילה
-                        newLevel = true;
+                        continueOuter = true;
                         break;
                     }
+                }
+                if (continueOuter) {
+                    continue;
                 }
             }
 
