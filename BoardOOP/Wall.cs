@@ -37,7 +37,8 @@ public class Wall {
         }
     }
 
-    public bool HasPoint(int x, int y) {
-        return points.Contains((x, y));
+    public bool HasPoint((int x, int y)? point) {
+        if (point is null) { return false; }
+        return points.Contains(point.Value);
     }
 }

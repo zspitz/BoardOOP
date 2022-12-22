@@ -5,8 +5,6 @@ public class Board {
     public int Width { get; }
     public int CurrentLevel { get; set; }
 
-    int cursorX;
-    int cursorY;
     Random rnd = new Random();
 
     public Wall[] Walls { get; }
@@ -36,34 +34,43 @@ public class Board {
             wall.Draw(Height, Width);
         }
 
-        cursorX = rnd.Next(0, Width);
-        cursorY = rnd.Next(0, Height);
+        Snake snake = new('*', Height, Width);
+        snake.DrawHead();
 
         while (true) {
-            var newX = cursorX;
-            var newY = cursorY;
-
+            Directions direction;
             switch (Console.ReadKey(true).Key) {
                 case ConsoleKey.UpArrow:
-                    newY -= 1;
+                    direction = Directions.Up;
                     break;
                 case ConsoleKey.DownArrow:
-                    newY += 1;
+                    direction = Directions.Down;
                     break;
                 case ConsoleKey.RightArrow:
-                    newX += 1;
+                    direction = Directions.Right;
                     break;
                 case ConsoleKey.LeftArrow:
-                    newX -= 1;
+                    direction = Directions.Left;
                     break;
+                default:
+                    continue;
+            }
+
+            var newHead = snake.CanMove(direction);
+            if (newHead is null) {
+                continue;
             }
 
             bool newLevel = false;
-            foreach (var wall in Walls) {
-                if (wall.HasPoint(newX, newY)) {
-                    // פסילה
-                    newLevel = true;
-                    break;
+            if (snake.HasPoint(newHead)) {
+                newLevel = true;
+            } else {
+                foreach (var wall in Walls) {
+                    if (wall.HasPoint(newHead)) {
+                        // פסילה
+                        newLevel = true;
+                        break;
+                    }
                 }
             }
 
@@ -73,14 +80,12 @@ public class Board {
                     wall.Draw(Height, Width);
                 }
 
-                cursorX = rnd.Next(0, Width);
-                cursorY = rnd.Next(0, Height);
-            } else {
-                cursorX = newX;
-                cursorY = newY;
+                snake = new('*', Height, Width);
+                snake.DrawHead();
+                continue;
             }
-            Console.SetCursorPosition(cursorX, cursorY);
-            Console.Write('*');
+
+            snake.Move(direction);
         }
     }
 }
