@@ -7,6 +7,5 @@ public class Program {
 
         var board = new Board(25, 80);
         board.StartGame();
-
     }
 }

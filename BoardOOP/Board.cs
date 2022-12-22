@@ -5,8 +5,6 @@ public class Board {
     public int Width { get; }
     public int CurrentLevel { get; set; }
 
-    Random rnd = new Random();
-
     public Wall[] Walls { get; }
 
     public Board(int height, int width) {
