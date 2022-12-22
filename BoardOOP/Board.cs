@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace BoardOOP;
+﻿namespace BoardOOP;
 
 public class Board {
     public int Height { get; }
@@ -80,9 +78,9 @@ public class Board {
             } else {
                 cursorX = newX;
                 cursorY = newY;
-                Console.SetCursorPosition(cursorX, cursorY);
-                Console.Write('*');
             }
+            Console.SetCursorPosition(cursorX, cursorY);
+            Console.Write('*');
         }
     }
 }
