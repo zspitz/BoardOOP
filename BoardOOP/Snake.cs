@@ -8,25 +8,20 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace BoardOOP; 
-public class Snake {
+public class Snake : Shape {
     private static Random rnd = new();
-    public char Char { get; }
-
-    public (int x, int y) Head => Body[^1];
+    public (int x, int y) Head => points[^1];
     //public (int x, int y) Head {
     //    get {
-    //        return Body[Body.Count - 1];
+    //        return points[points.Count - 1];
     //    }
     //}
 
-    public List<(int x, int y)> Body { get; } = new();
-
     public Directions? LastDirection { get; private set; } = null;
 
-    public Snake(char character, int boardHeight, int boardWidth) {
-        Char = character;
+    public Snake(char filler, int boardHeight, int boardWidth) : base(filler) {
         // TODO handle wall overlap outside of Snake class
-        Body.Add((
+        points.Add((
             rnd.Next(1, boardWidth),
             rnd.Next(1, boardHeight)
         ));
@@ -34,7 +29,7 @@ public class Snake {
 
     public void DrawHead() {
         Console.SetCursorPosition(Head.x, Head.y);
-        Console.Write(Char);
+        Console.Write(filler);
     }
 
     private (int x, int y) getNewHead(Directions direction) {
@@ -71,13 +66,8 @@ public class Snake {
 
     public void Move(Directions direction) {
         var newHead = getNewHead(direction);
-        Body.Add(newHead);
+        points.Add(newHead);
         DrawHead();
         LastDirection = direction;
-    }
-
-    public bool HasPoint((int x, int y)? newHead) {
-        if (newHead is null) { return false; }
-        return Body.Contains(newHead.Value);
     }
 }

@@ -1,14 +1,10 @@
 ﻿namespace BoardOOP;
-public class Wall {
+public class Wall : Shape {
     readonly bool isHorizontal;
-    readonly char filler;
     readonly bool atStart;
 
-    List<(int x, int y)> points = new();
-
-    public Wall(bool isHorizontal, char filler, bool atStart) {
+    public Wall(bool isHorizontal, char filler, bool atStart) : base(filler) {
         this.isHorizontal = isHorizontal;
-        this.filler = filler;
         this.atStart = atStart;
     }
 
@@ -30,15 +26,6 @@ public class Wall {
                 points.Add((width, i));
             } 
         }
-
-        foreach (var (x,y) in points) {
-            Console.SetCursorPosition(x, y);
-            Console.Write(filler);
-        }
-    }
-
-    public bool HasPoint((int x, int y)? point) {
-        if (point is null) { return false; }
-        return points.Contains(point.Value);
+        Draw();
     }
 }
