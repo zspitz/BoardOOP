@@ -33,10 +33,9 @@ public class Shape {
         List<(int x, int y)> points = new();
         char filler = ' ';
 
-        var top = rnd.Next(0, boardHeight);
-        var left = rnd.Next(0, boardWidth);
-
         while (true) {
+            var top = rnd.Next(0, boardHeight);
+            var left = rnd.Next(0, boardWidth);
 
             switch (rnd.Next(0, 2)) {
                 case 0:
@@ -60,18 +59,34 @@ public class Shape {
                         continue;
                     }
 
-                    for (int y = top; y < height + top; y++) {
-                        for (int x = left; x <= height + left; x++) {
-                            points.Add((x, y));
+                    for (int relativeX = 0; relativeX < height; relativeX++) {
+                        for (int relativeY = 0; relativeY <= relativeX; relativeY++) {
+                            points.Add((relativeX + left, relativeY + top));
                         }
                     }
+
+                    //for (int y = top; y < height + top; y++) {
+                    //    for (int x = left; x <= y; x++) {
+                    //        points.Add((x, y));
+                    //    }
+                    //}
                     break;
             }
 
             break;
         }
 
-
         return new Shape(filler, points);
+    }
+
+    public static bool HasCollision(Shape shape1, Shape shape2) {
+        foreach (var (x1,y1) in shape1.points) {
+            foreach (var (x2,y2) in shape2.points) {
+                if (x1 == x2 && y1 == y2) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

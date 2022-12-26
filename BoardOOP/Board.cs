@@ -88,16 +88,49 @@ public class Board {
             wall.Draw(Height, Width);
         }
 
-        var shapeCount = shapes.Count;
+        var shapeCount = 
+            shapes.Count == 0 ?
+                new Random().Next(3, 7) :
+                shapes.Count + 1;
+
         shapes.Clear();
+
+        bool hasCollision;
         for (int i = 0; i < shapeCount; i++) {
-            shapes.Add(Shape.CreateRandom(Height, Width));
+            Shape newShape;
+            do {
+                hasCollision = false;
+                newShape = Shape.CreateRandom(Height, Width);
+                foreach (var shape in shapes) {
+                    if (Shape.HasCollision(shape,newShape)) {
+                        hasCollision = true;
+                        break;
+                    }
+                    //if (Shape.HasCollision(snake, newShape)) {
+                    //    hasCollision = true;
+                    //    break;
+                    //}
+                }
+            } while (hasCollision);
+
+            shapes.Add(newShape);
         }
+
         foreach (var shape in shapes) {
             shape.Draw();
         }
 
-        snake = new('*', Height, Width);
+        do {
+            hasCollision = false;
+            snake = new('*', Height, Width);
+            foreach (var shape in shapes) {
+                if (Shape.HasCollision(shape, snake)) {
+                    hasCollision = true;
+                    break;
+                }
+            }    
+        } while (hasCollision);
+
         snake.DrawHead();
     }
 }
