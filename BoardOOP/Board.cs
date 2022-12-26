@@ -6,7 +6,6 @@ public class Board {
     public int CurrentLevel { get; private set; } = 0;
     Snake snake;
     List<Shape> shapes = new();
-    int shapeCount;
 
     public Wall[] Walls { get; }
 
@@ -27,8 +26,6 @@ public class Board {
 |                    ;
 +++++++++++
         */
-
-        shapeCount = new Random().Next(3, 7);
     }
 
     public void StartGame() {
@@ -91,6 +88,7 @@ public class Board {
             wall.Draw(Height, Width);
         }
 
+        var shapeCount = shapes.Count;
         shapes.Clear();
         for (int i = 0; i < shapeCount; i++) {
             shapes.Add(Shape.CreateRandom(Height, Width));
@@ -98,7 +96,6 @@ public class Board {
         foreach (var shape in shapes) {
             shape.Draw();
         }
-        shapeCount += 1;
 
         snake = new('*', Height, Width);
         snake.DrawHead();
