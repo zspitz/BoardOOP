@@ -106,10 +106,6 @@ public class Board {
                         hasCollision = true;
                         break;
                     }
-                    //if (Shape.HasCollision(snake, newShape)) {
-                    //    hasCollision = true;
-                    //    break;
-                    //}
                 }
             } while (hasCollision);
 
