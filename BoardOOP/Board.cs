@@ -3,7 +3,10 @@
 public class Board {
     public int Height { get; }
     public int Width { get; }
-    public int CurrentLevel { get; set; }
+    public int CurrentLevel { get; private set; } = 0;
+    Snake snake;
+    List<Shape> shapes = new();
+    int shapeCount;
 
     public Wall[] Walls { get; }
 
@@ -25,15 +28,11 @@ public class Board {
 +++++++++++
         */
 
+        shapeCount = new Random().Next(3, 7);
     }
 
     public void StartGame() {
-        foreach (var wall in Walls) {
-            wall.Draw(Height, Width);
-        }
-
-        Snake snake = new('*', Height, Width);
-        snake.DrawHead();
+        startLevel();
 
         while (true) {
             Directions direction;
@@ -54,7 +53,7 @@ public class Board {
                     continue;
             }
 
-            var newHead = snake.CanMove(direction);
+            var newHead = snake.TryGetNewHead(direction);
             if (newHead is null) {
                 continue;
             }
@@ -76,17 +75,32 @@ public class Board {
             }
 
             if (newLevel) {
-                Console.Clear();
-                foreach (var wall in Walls) {
-                    wall.Draw(Height, Width);
-                }
-
-                snake = new('*', Height, Width);
-                snake.DrawHead();
+                startLevel();
                 continue;
             }
 
             snake.Move(direction);
         }
+    }
+
+    private void startLevel() {
+        CurrentLevel += 1;
+
+        Console.Clear();
+        foreach (var wall in Walls) {
+            wall.Draw(Height, Width);
+        }
+
+        shapes.Clear();
+        for (int i = 0; i < shapeCount; i++) {
+            shapes.Add(Shape.CreateRandom(Height, Width));
+        }
+        foreach (var shape in shapes) {
+            shape.Draw();
+        }
+        shapeCount += 1;
+
+        snake = new('*', Height, Width);
+        snake.DrawHead();
     }
 }

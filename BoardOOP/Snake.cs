@@ -51,7 +51,7 @@ public class Snake : Shape {
         return newHead;
     }
 
-    public (int x, int y)? CanMove(Directions direction) {
+    public (int x, int y)? TryGetNewHead(Directions direction) {
         if (
             LastDirection == Directions.Up && direction == Directions.Down ||
             LastDirection == Directions.Down && direction == Directions.Up ||
